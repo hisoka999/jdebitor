@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <script type="text/javascript">
@@ -38,28 +39,52 @@ function dateFormatter(value){
 <div class="row">
 	<div class="col-lg-12">
 		<div class="panel panel-default">
-			<div class="panel-heading">Create Customer</div>
+			<div class="panel-heading">Create Invoice</div>
 			<div class="panel-body">
 				<div class="col-md-6">
-					<c:url value='/customer/add' var="addUrl"/>
+					<c:url value='/invoice/add' var="addUrl"/>
 					<form:form role="form" method="POST"
-						action="${addUrl}" modelAttribute="customerForm">
+						action="${addUrl}" modelAttribute="invoiceForm">
 
 						<div class="form-group">
-							<label>Firstname</label> <form:input path="firstName" cssClass="form-control" />
-								<form:errors path="firstName" />
+							<label>Customer</label> <form:input path="customer" cssClass="form-control" />
+								<form:errors path="customer" />
 						</div>
 
 						<div class="form-group">
-							<label>last name</label> <input class="form-control"
-								placeholder="last name" name="lastName">
-								<form:errors path="lastName" />
+							<label>Currency</label> 
+								
 						</div>
 						
 						<div class="form-group">
-							<label>birthDate</label> <input class="form-control" type="date"
-								placeholder="last name" name="birthDate" />
-								<form:errors path="birthDate" />
+							<label>Due Date</label> <input class="form-control" type="date"
+								 name="dueDate" />
+								<form:errors path="dueDate" />
+						</div>
+						
+						<div class="form-group">
+							<table>
+								<tr>
+									<th>Product</th>
+									<th>Net Amount</th>
+									<th>Tax</th>
+									<th>Currency</th>
+								</tr>
+						    <c:forEach items="${invoiceForm.invoiceItems}" var="invoiceItem" varStatus="status">
+						        <tr>
+						            <td><input name="invoiceItems[${status.index}].product" value="${invoiceItem.product}"/></td>
+						            <td><input name="invoiceItems[${status.index}].netAmount" value="${invoiceItem.netAmount}"/></td>
+						            <td><input name="invoiceItems[${status.index}].tax" value="${invoiceItem.tax}"/></td>
+						            <td><input name="invoiceItems[${status.index}].currency" value="${invoiceItem.currency}"/></td>
+						        </tr>
+						    </c:forEach>
+						        <tr>
+						            <td><input name="invoiceItems[${fn:length(invoiceForm.invoiceItems)+1}].product" value="${invoiceItem.product}"/></td>
+						            <td><input name="invoiceItems[1].netAmount" value="${invoiceItem.netAmount}"/></td>
+						            <td><input name="invoiceItems[1].tax" value="${invoiceItem.tax}"/></td>
+						            <td><input name="invoiceItems[1].currency" value="${invoiceItem.currency}"/></td>
+						        </tr>
+							</table>
 						</div>
 						
 						<input type="hidden" name="${_csrf.parameterName}"

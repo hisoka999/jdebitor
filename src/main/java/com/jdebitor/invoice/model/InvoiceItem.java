@@ -32,13 +32,14 @@ public class InvoiceItem {
 	private BigDecimal grossAmount;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@Column(name = "currency_id")
+	@JoinColumn(name = "currency_id")
 	private Currency currency;
 
+	@Column
 	private Integer tax;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@Column(name = "product_id")
+	@JoinColumn(name = "product_id")
 	private Product product;
 
 	public Long getId() {
